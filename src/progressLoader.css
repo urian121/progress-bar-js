@@ -14,7 +14,7 @@
   width: 0%;
   height: 100%;
   background-color: #c00;
-  animation: expand 1.5s ease-in-out forwards;
+  transition: width 0.2s ease-out;
 }
 
 @-moz-keyframes expand {

@@ -14,28 +14,160 @@
 
 ## Instalación
 
-    $ npm install progress-loader-js --save
-    $ yarn add progress-loader-js
+```bash
+  npm install progress-loader-js --save
+  yarn add progress-loader-js
+```
 
-## Ejemplo Práctico utilizando React.js
+## 🚀 API Súper Fácil
+
+### **API Moderna (Recomendada)**
+
+```jsx
+import { start, complete, hide } from "progress-loader-js";
+import { useState, useEffect } from "react";
+
+function App() {
+  const [menu, setMenu] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Iniciar barra de progreso
+    start({
+      backgroundColor: "#f8f9fa",
+      barColor: "#ff6b35"
+    });
+    
+    // Cargar menú desde API
+    fetch('https://devsapihub.com/api-fast-food')
+      .then(response => response.json())
+      .then(data => {
+        setMenu(data);
+        // Completar progreso
+        complete();
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        // Ocultar en caso de error
+        hide();
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, []);
+
+  return (
+    <div style={{ padding: '2rem', maxWidth: '800px', margin: '0 auto' }}>
+      <h1>🍕 Menú de Comida Rápida</h1>
+      
+      {loading ? (
+        <p>Cargando menú...</p>
+      ) : (
+        <div>
+          <h2>📋 Productos Disponibles ({menu.length})</h2>
+          <div style={{ 
+            display: 'grid', 
+            gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', 
+            gap: '1rem',
+            marginTop: '1rem'
+          }}>
+            {menu.slice(0, 6).map(item => (
+              <div key={item.id} style={{
+                border: '1px solid #e0e0e0',
+                borderRadius: '8px',
+                padding: '1rem',
+                backgroundColor: '#fff'
+              }}>
+                <img 
+                  src={item.image} 
+                  alt={item.name}
+                  style={{ width: '100%', height: '150px', objectFit: 'cover', borderRadius: '4px' }}
+                />
+                <h3 style={{ margin: '0.5rem 0', fontSize: '16px' }}>{item.name}</h3>
+                <p style={{ color: '#ff6b35', fontWeight: 'bold', fontSize: '18px' }}>
+                  ${item.price}
+                </p>
+                <span style={{ 
+                  backgroundColor: '#f0f0f0', 
+                  padding: '0.25rem 0.5rem', 
+                  borderRadius: '12px',
+                  fontSize: '12px',
+                  textTransform: 'capitalize'
+                }}>
+                  {item.category}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+export default App;
+```
+
+### **API Básica (Compatibilidad)**
 
 ```jsx
 import { ProgressLoaderContainer } from "progress-loader-js";
-import "progress-loader-js/dist/style.css";
+import { useState, useEffect } from "react";
 
 function App() {
-  const ActivarBarra = () => {
+  const [pizzas, setPizzas] = useState([]);
+
+  useEffect(() => {
+    // Activar barra automática
     ProgressLoaderContainer({
-      backgroundColor: "#ccc",
-      barColor: "#1fb141",
+      backgroundColor: "#f8f9fa",
+      barColor: "#10b981",
     });
-  };
+    
+    // Cargar solo pizzas desde API
+    fetch('https://devsapihub.com/api-fast-food/category/pizza')
+      .then(response => response.json())
+      .then(data => {
+        setPizzas(data.slice(0, 4)); // Solo primeras 4 pizzas
+        console.log('Pizzas cargadas:', data.length);
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+  }, []);
 
   return (
-    <>
-      <h1>Progress Loader JS</h1>
-      <button onClick={ActivarBarra}>Activar Barra</button>
-    </>
+    <div style={{ padding: '2rem' }}>
+      <h1>🍕 Pizzas Disponibles</h1>
+      
+      {pizzas.length > 0 && (
+        <div style={{ marginTop: '2rem' }}>
+          <h2>📋 Nuestras Pizzas ({pizzas.length})</h2>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', gap: '1rem' }}>
+            {pizzas.map(pizza => (
+              <div key={pizza.id} style={{
+                border: '1px solid #e0e0e0',
+                borderRadius: '8px',
+                padding: '1rem',
+                backgroundColor: '#fff'
+              }}>
+                <img 
+                  src={pizza.image} 
+                  alt={pizza.name}
+                  style={{ width: '100%', height: '150px', objectFit: 'cover', borderRadius: '4px' }}
+                />
+                <h3 style={{ margin: '0.5rem 0', color: '#10b981' }}>
+                  {pizza.name}
+                </h3>
+                <p style={{ color: '#10b981', fontWeight: 'bold', fontSize: '18px' }}>
+                  ${pizza.price}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
   );
 }
 
@@ -48,17 +180,70 @@ export default App;
 
 ```jsx
 "use client";
-import { ProgressLoaderContainer } from "progress-loader-js";
-import "progress-loader-js/dist/style.css";
+import { start, complete, hide } from "progress-loader-js";
+import { useEffect, useState } from "react";
 
-export default function Contacto() {
-  ProgressLoaderContainer({
-    backgroundColor: "#ccc",
-    barColor: "#1fb141",
-  });
+export default function MenuPage() {
+  const [cafes, setCafes] = useState([]);
+
+  useEffect(() => {
+    // Iniciar barra de progreso al cargar la página
+    start({
+      backgroundColor: "#f0f0f0",
+      barColor: "#8b5cf6"
+    });
+
+    // Cargar solo cafés desde API
+    fetch('https://devsapihub.com/api-fast-food/category/cafe')
+      .then(response => response.json())
+      .then(data => {
+        setCafes(data.slice(0, 6)); // Solo primeros 6 cafés
+        // Completar progreso
+        complete();
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        // Ocultar en caso de error
+        hide();
+      });
+  }, []);
+
   return (
-    <div>
-      <h1>Página de Contacto 😯</h1>
+    <div style={{ padding: '2rem', maxWidth: '800px', margin: '0 auto' }}>
+      <h1>☕ Cafés Disponibles</h1>
+      <p>Cafés cargados automáticamente al abrir la página</p>
+      
+      {cafes.length > 0 && (
+        <div style={{ 
+          display: 'grid', 
+          gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', 
+          gap: '1rem',
+          marginTop: '2rem'
+        }}>
+          {cafes.map(cafe => (
+            <div key={cafe.id} style={{
+              border: '1px solid #e0e0e0',
+              borderRadius: '8px',
+              overflow: 'hidden',
+              backgroundColor: '#fff'
+            }}>
+              <img 
+                src={cafe.image} 
+                alt={cafe.name}
+                style={{ width: '100%', height: '150px', objectFit: 'cover' }}
+              />
+              <div style={{ padding: '1rem' }}>
+                <h3 style={{ margin: '0 0 0.5rem 0', fontSize: '14px', color: '#8b5cf6' }}>
+                  {cafe.name}
+                </h3>
+                <p style={{ margin: '0', fontSize: '16px', color: '#8b5cf6', fontWeight: 'bold' }}>
+                  ${cafe.price}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
@@ -66,47 +251,13 @@ export default function Contacto() {
 
 👉 [Ver Código en GitHub](https://github.com/urian121/app-nextjs-con-progress-loader-js)
 
-## Uso a través de CDN
-
-También puedes incluir `progress-loader-js` directamente en tu proyecto utilizando un enlace CDN. Sigue estos pasos:
-
-```html
-<!DOCTYPE html>
-<html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Progress Loader JS</title>
-    <!-- Incluir el CSS de loading-request desde CDN -->
-    <link rel="stylesheet" href="https://unpkg.com/progress-loader-js/dist/style.css" />
-  </head>
-  <body>
-    <button id="btnLoading">Mostrar Loading</button>
-
-    <script type="module">
-      import { ProgressLoaderContainer } from "https://unpkg.com/progress-loader-js/dist/index.js";
-
-      // Función para mostrar el loading
-      function handleShowLoading() {
-        ProgressLoaderContainer({
-          backgroundColor: "lightblue",
-          barColor: "green",
-        });
-      }
-
-      // Asociar la función al botón
-      document.querySelector("#btnLoading").addEventListener("click", handleShowLoading);
-    </script>
-  </body>
-</html>
-```
-
-## Caracteristicas
+## Características
 
 - Fácil implementación: Agrega indicadores de progreso con solo unas líneas de código.
 - Compatible con varios frameworks: Funciona sin problemas en React, Vue, Angular, Next, Svelte y más.
 - Personalización flexible: Ajusta colores del spinner y texto de carga según tus necesidades.
 - Instalación rápida: Se integra fácilmente via npm o yarn en minutos.
+- **Inyección automática de CSS**: Los estilos se cargan automáticamente, no necesitas importar archivos CSS manualmente.
 - Soporte para operaciones asíncronas: Ideal para carga de datos y navegación entre páginas.
 - Animaciones suaves: Mejora la experiencia de usuario con animaciones CSS.
 - Eficiencia y rendimiento: Diseñado para impactar mínimamente el rendimiento de la aplicación.
@@ -114,25 +265,50 @@ También puedes incluir `progress-loader-js` directamente en tu proyecto utiliza
 - Mantenimiento activo: Actualizaciones frecuentes y mejoras continuas.
 - Licencia abierta: Publicado bajo licencia ISC, apto para uso comercial y personal.
 
-## API
+## 📚 API Completa
 
-#### ProgressLoaderContainer(options: ProgressLoaderOptions);
+### **API Moderna (Solo 3 funciones)**
 
-Esta función crea y muestra una barra de progreso con opciones personalizables. Por defecto, la barra de progreso se muestra en la parte superior de la página y se oculta automáticamente cuando se completa la carga.
+#### `start(options?)`
+Inicia la barra de progreso con progreso automático (como YouTube).
 
-- **Parámetros**:
+```js
+start({
+  backgroundColor: "#e0e0e0",
+  barColor: "#4CAF50"
+});
+```
 
-  - Recibe un objeto opcional de tipo ProgressLoaderOptions que contiene las opciones para personalizar la barra de progreso y su fondo. El objeto puede incluir las siguientes propiedades:
-    - **backgroundColor**: Color de fondo de la barra de progreso. Por defecto es **#ccc**. Si se proporciona, se aplica dinámicamente.
-    - **barColor**: Color de la barra de progreso. Por defecto es **#f11946**. Si se proporciona, se aplica dinámicamente.
+#### `complete()`
+Completa la barra (100%) y la oculta automáticamente.
 
-- **Opciones**
-  - **backgroundColor**: Color de fondo de la barra de progreso.
-  - **barColor**: Color de la barra de progreso.
+```js
+complete();
+```
 
-Esta función es útil para implementar indicadores de carga visualmente atractivos y personalizables en aplicaciones web.
+#### `hide()`
+Oculta la barra inmediatamente.
 
-Como se mencionó antes, ProgressLoaderContainer recibe de forma opcional un objeto con los colores para personalizar la barra de progreso y su fondo. Por defecto, la barra posee como color backgroundColor: #ccc y barColor: **#f11946**.
+```js
+hide();
+```
+
+### **API Básica (Compatibilidad)**
+
+#### `ProgressLoaderContainer(options?)`
+Función original que mantiene compatibilidad con versiones anteriores.
+
+```js
+ProgressLoaderContainer({
+  backgroundColor: "#ccc",
+  barColor: "#f11946"
+});
+```
+
+### **Opciones de Configuración**
+
+- **backgroundColor**: Color de fondo de la barra de progreso (default: `#ccc`)
+- **barColor**: Color de la barra de progreso (default: `#f11946`)
 
 ### Contribuir
 

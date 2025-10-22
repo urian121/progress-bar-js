@@ -13,12 +13,15 @@ export default defineConfig({
       output: {
         format: "es",
         entryFileNames: "index.js",
+        preserveModules: false,
       },
     },
+    minify: false, // Deshabilitar minificación para mejor debugging
   },
   plugins: [
     dts({
       outputDir: "dist",
+      include: ["src/index.ts"],
     }),
   ],
 });

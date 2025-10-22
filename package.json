@@ -7,7 +7,12 @@
   "types": "dist/index.d.ts",
   "module": "dist/index.js",
   "scripts": {
-    "build": "vite build"
+    "build": "vite build",
+    "build:clean": "vite build && node scripts/post-build.cjs",
+    "dev": "vite --host",
+    "preview": "vite preview",
+    "clean": "node -e \"const fs=require('fs'); if(fs.existsSync('dist')) fs.rmSync('dist',{recursive:true,force:true})\"",
+    "rebuild": "npm run clean && npm run build"
   },
   "repository": {
     "type": "git",
