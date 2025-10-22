@@ -1,6 +1,6 @@
 {
   "name": "progress-loader-js",
-  "version": "1.6.0",
+  "version": "1.7.0",
   "description": "Progress Loader JS es un paquete versátil, que te permite mostrar una barra de progreso elegante y altamente personalizable para tus aplicaciones web. Añade un toque de profesionalismo y dinamismo a tu sitio con una implementación sencilla y opciones de personalización flexibles. Ideal para cualquier proyecto que necesite mostrar el progreso de una forma atractiva y eficaz.",
   "type": "module",
   "main": "dist/index.js",
